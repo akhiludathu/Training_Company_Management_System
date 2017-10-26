@@ -60,4 +60,72 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	$('#addcoursebtn').click(function(){
+		console.log($('#newcourseform').serialize());
+		$.ajax({
+			url: '/handle_newcourse',
+			data: $('#newcourseform').serialize(),
+			type: 'POST',
+			success: function(response){
+				console.log(response);
+				if(response == 'Success')
+				{
+					alert('Program added successfully!');
+					var form = document.getElementById("newcourseform");
+					form.reset();
+				}
+			},
+			error: function(error){
+				alert('Could not add program.');
+			}
+		});
+	});
+
+	$('#btnGrade').click(function(){
+		console.log($('#gradeform').serialize());
+		var obj = $('#gradeform').serialize();
+		console.log(obj);
+		$.ajax({
+			url: '/gradechange',
+			data: $('#gradeform').serializeArray(),
+			//data: JSON.stringify(obj),
+			type: 'POST',
+			success: function(response){
+				console.log(response);
+				if(response == 'Success')
+				{
+					var form = document.getElementById("gradeform");
+					form.reset();
+					$("#grade-modal").modal('toggle');
+					alert('Grade updated successfully!');
+				}
+			},
+			error: function(error){
+				alert('Could not change grade.');
+			}
+		});
+	});
+
+	$('#addtraineebtn').click(function(){
+		$.ajax({
+			url: '/handle_newtrainee',
+			data: $('#newtraineeform').serialize(),
+			type: 'POST',
+			success: function(response){
+				console.log(response);
+				if(response == 'Success')
+				{
+					alert('Trainee details added successfully!');
+					var form = document.getElementById("newtraineeform");
+					form.reset();
+				}
+			},
+			error: function(error){
+				alert('Could not add trainee details.');
+			}
+		});
+	});
+
+	$("#startdate").datepicker();
 });

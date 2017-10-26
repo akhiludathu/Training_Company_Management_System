@@ -8,7 +8,7 @@ from flask import Flask
 from flask_cors import CORS, cross_origin
 import mysql.connector
 from flask import request, session
-from flask import render_template, send_file, redirect
+from flask import render_template, send_file, redirect, jsonify
 import datetime
 import json
 import base64
@@ -50,14 +50,41 @@ def handle_login():
     if rs[1]==passwd:
         if rs[2]==0:
             #return 'Successful admin login'
-            return render_template('admin.html')
-            #return redirect('/adminHome')
+            #return render_template('admin.html')
+            return redirect('/adminHome')
         elif rs[2]==1:
             #return 'Successful company login'
-            return render_template('company.html')
-            #return redirect('/companyHome')
+            #return render_template('company.html')
+            return redirect('/companyHome')
     else:
         return 'Wrong login credentials'
+
+@app.route('/handle_newcourse',methods=['POST'])
+def handle_newcourse():
+    try:
+        query = ("Insert into Program values (\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')" % (request.form['id'],request.form['name'],request.form['description'],request.form['duration'],request.form['start'],request.form['supervisor']))
+        cursor.execute(query)
+        cnx.commit()
+        return 'Success'
+    except:
+        return 'Failure'
+
+@app.route('/handle_newtrainee',methods=['POST'])
+def handle_newtrainee():
+    try:
+        user=session.get('user')
+        query = ("SELECT companyId FROM Company WHERE userID = \'%s\'" % (user))
+        cursor.execute(query)
+        rs= cursor.fetchone()
+        companyid = rs[0]
+        query = ("Insert into Trainee values (\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',NULL,NULL)" % (companyid, request.form['id'],request.form['name'],request.form['phone'],request.form['residence'],request.form['street'],request.form['zipcode']))
+        print query
+        cursor.execute(query)
+        print 'hi'
+        cnx.commit()
+        return 'Success'
+    except:
+        return 'Failure'
 
 @app.route('/handle_signup',methods=['POST'])
 def handle_signup():
@@ -100,7 +127,6 @@ def adminHome():
         return render_template('admin.html',user=session.get('user'))
     else:
         return 'Unauthorised access'
-    #return 'haajhacksjh'
 
 @app.route('/companyHome')
 def companyHome():
@@ -114,6 +140,124 @@ def logout():
     session.pop('user',None)
     return redirect('/')
 
+@app.route('/getIds')
+def getIds():
+    # try:
+    if session.get('user'):
+        cursor.execute("SELECT * FROM Program");
+        ids = cursor.fetchall()
+
+        wishes_dict = []
+        for wish in ids:
+            wish_dict = {
+                    'Id': wish[0],
+                    'Name': wish[1],
+                    'Description': wish[2],
+                    'Duration':wish[3],
+                    'Start_Date':wish[4]}
+            wishes_dict.append(wish_dict)
+        #return 'hi'
+        return json.dumps(wishes_dict)
+    else:
+        return 'random'
+    # except Exception as e:
+    #     return 'random11'
+
+@app.route('/getPrograms')
+def getPrograms():
+    # try:
+    if session.get('user'):
+        cursor.execute("SELECT * FROM Program");
+        ids = cursor.fetchall()
+
+        wishes_dict = []
+        for wish in ids:
+            wish_dict = {
+                    'Id': wish[0],
+                    'Name': wish[1],
+                    'Description': wish[2],
+                    'Duration':wish[3],
+                    'Start_Date':wish[4]}
+            wishes_dict.append(wish_dict)
+        #return 'hi'
+
+        user = session.get('user')
+
+        query = ("SELECT companyId FROM Company WHERE userID = \'%s\'" % (user))
+        cursor.execute(query)
+        rs= cursor.fetchone()
+        companyid = rs[0]
+
+        query = ("SELECT * FROM Trainee WHERE companyId = \'%s\'" %(companyid))
+        cursor.execute(query)
+        trs = cursor.fetchall()
+
+        trainees_dict = []
+        for trainee in trs:
+            train_dict = {
+                    'ProgramId':trainee[1],
+                    'Name':trainee[2],
+                    'TraineeId':trainee[7],
+                    'Phone':trainee[3],
+                    'Grade':trainee[8]}
+            trainees_dict.append(train_dict)
+
+        data = {}
+        data['progs'] = wishes_dict
+        data['trains'] = trainees_dict
+        return json.dumps(data)
+    else:
+        return 'random'
+    # except Exception as e:
+    #     return 'random11'
+
+@app.route('/test',methods=['POST','GET'])
+def test():
+    try:
+        data = json.loads(request.data)
+        query = ("DELETE FROM Program WHERE programId=\'%s\'" %(data.get('id')))
+        cursor.execute(query)
+        cnx.commit()
+        return 'Success'
+    except:
+        return 'Failure'
+
+@app.route('/gettrainees',methods=['POST','GET'])
+def gettrainees():
+    data = json.loads(request.data)
+    query = ("SELECT * FROM Trainee WHERE programId=\'%s\'" %(data.get('id')))
+    cursor.execute(query)
+    trs = cursor.fetchall()
+
+    trainees_dict = []
+    for trainee in trs:
+        train_dict = {
+                'ProgramId':trainee[1],
+                'Name':trainee[2],
+                'TraineeId':trainee[7],
+                'Phone':trainee[3],
+                'Grade':trainee[8]}
+        trainees_dict.append(train_dict)
+    return json.dumps(trainees_dict)
+
+@app.route('/gradechange',methods=['POST','GET'])
+def gradechange():
+    print request.form['id']
+    query = ("UPDATE Trainee SET Grade=\'%c\' WHERE traineeId=\'%s\'" %(request.form['grade'],request.form['id']))
+    cursor.execute(query)
+    cnx.commit();
+    return 'Success'
+
+@app.route('/removetrainee',methods=['POST','GET'])
+def removetrainee():
+    try:
+        data = json.loads(request.data)
+        query = ("DELETE FROM Trainee WHERE traineeId=%d" %(data.get('id')))
+        cursor.execute(query)
+        cnx.commit()
+        return 'Success'
+    except:
+        return 'Failure'
 
 if __name__ == '__main__':
     app.run(debug=True)
