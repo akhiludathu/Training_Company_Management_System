@@ -156,8 +156,27 @@ def getIds():
                     'Duration':wish[3],
                     'Start_Date':wish[4]}
             wishes_dict.append(wish_dict)
-        #return 'hi'
-        return json.dumps(wishes_dict)
+
+        cursor.execute("SELECT * FROM Company");
+        ids = cursor.fetchall()
+
+        companies_dict = []
+        for company in ids:
+            company_dict = {
+                    'Id': company[0],
+                    'Name': company[4],
+                    'Uid': company[1],
+                    'POCname':company[2],
+                    'POCnum':company[3],
+                    'Ind':company[6],
+                    'Regdate':"{:%B %d, %Y}".format(company[5])}
+            companies_dict.append(company_dict)
+
+        data = {}
+        data['progs'] = wishes_dict
+        data['comps'] = companies_dict
+
+        return json.dumps(data)
     else:
         return 'random'
     # except Exception as e:
@@ -188,18 +207,18 @@ def getPrograms():
         rs= cursor.fetchone()
         companyid = rs[0]
 
-        query = ("SELECT * FROM Trainee WHERE companyId = \'%s\'" %(companyid))
+        query = ("SELECT b.program_name, a.* FROM Trainee a left join Program b on a.programId=b.programId WHERE a.companyId = \'%s\'" %(companyid))
         cursor.execute(query)
         trs = cursor.fetchall()
 
         trainees_dict = []
         for trainee in trs:
             train_dict = {
-                    'ProgramId':trainee[1],
-                    'Name':trainee[2],
-                    'TraineeId':trainee[7],
-                    'Phone':trainee[3],
-                    'Grade':trainee[8]}
+                    'ProgramId':trainee[2],
+                    'Name':trainee[3],
+                    'TraineeId':trainee[8],
+                    'Phone':trainee[4],
+                    'Grade':trainee[9]}
             trainees_dict.append(train_dict)
 
         data = {}

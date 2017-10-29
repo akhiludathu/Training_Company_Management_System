@@ -165,69 +165,22 @@
     <!--/.HEADER LINE END-->
 
     <div class="row set-row-pad" >
-      <div class="col-lg-6 col-md-6 col-sm-6 " data-scroll-reveal="enter from the bottom after 0.4s" >
-        <img src="../static/building.jpg" class="img-thumbnail" />
-      </div>
-      <div class="col-lg-4 col-md-4 col-sm-4 col-lg-offset-1 col-md-offset-1 col-sm-offset-1">
-        <div class="panel-group" id="accordion">
-          <div class="panel panel-default" data-scroll-reveal="enter from the bottom after 0.5s">
-              <div class="panel-heading" >
-                  <h4 class="panel-title">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="collapsed">
-                        <strong>   350+</strong> DESIGNING COURSES
-                      </a>
-                  </h4>
-              </div>
-              <div id="collapse1" class="panel-collapse collapse" style="height: 0px;">
-                  <div class="panel-body">
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis egestas mauris ut vehicula. Cras viverra ac orci ac aliquam. Nulla eget condimentum mauris, eget tincidunt est.</p>
-                  </div>
-              </div>
-          </div>
+      <table id="CompanyTable" class="table-fill">
+        <thead>
+          <tr>
+            <th class="text-center">Company ID</th>
+            <th class="text-center">Name</th>
+            <th class="text-center">Industry</th>
+            <th class="text-center">Login User ID</th>
+            <th class="text-center">POC Name</th>
+            <th class="text-center">POC Phone number</th>
+            <th class="text-center">Registration Date</th>
+          </tr>
+        </thead>
 
-          <div class="panel panel-default" data-scroll-reveal="enter from the bottom after 0.7s">
-              <div class="panel-heading">
-                  <h4 class="panel-title">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="collapsed">
-                        <strong>   250+</strong> ENGINEERING COURSES
-                      </a>
-                  </h4>
-              </div>
-              <div id="collapse2" class="panel-collapse collapse" style="height: 0px;">
-                  <div class="panel-body">
-                      <p>
-                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis egestas mauris ut vehicula. Cras viverra ac orci ac aliquam. Nulla eget condimentum mauris, eget tincidunt est.
-                      </p>
-                  </div>
-              </div>
-          </div>
-
-          <div class="panel panel-default" data-scroll-reveal="enter from the bottom after 0.9s">
-              <div class="panel-heading">
-                  <h4 class="panel-title">
-                      <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="collapsed">
-                          <strong>   153+</strong> MANAGEMENT COURSES
-                      </a>
-                  </h4>
-              </div>
-              <div id="collapse3" class="panel-collapse collapse"  style="height: 0px;">
-                  <div class="panel-body">
-                      <p>
-                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sagittis egestas mauris ut vehicula. Cras viverra ac orci ac aliquam. Nulla eget condimentum mauris, eget tincidunt est.
-                      </p>
-                  </div>
-              </div>
-          </div>
-        </div>
-
-        <div class="alert alert-info" data-scroll-reveal="enter from the bottom after 1.1s" >
-         <span style="font-size:40px;">
-            <strong> 2500 + </strong>
-             <hr />
-             Centers
-         </span>
-        </div>
-      </div>
+        <tbody class="table-hover">
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -387,7 +340,9 @@ $(function() {
                         $('<h6>'),
                         $('<button>').attr('class','btn btn-info btn-set').text('Remove')));
 
-            var progobj = JSON.parse(res);
+            dat = JSON.parse(res)
+            var progobj = dat.progs;
+            var compobj = dat.comps
 
             var prog = '';
 
@@ -466,6 +421,30 @@ $(function() {
                 });
                 $('#coursesdiv').append(prog);
             });
+
+            length = compobj.length
+            for(var i=0;i<length;i++)
+            {
+                var x=document.getElementById('CompanyTable').insertRow(1);
+                var c1=x.insertCell(0);
+                var c2=x.insertCell(1);
+                var c3=x.insertCell(2);
+                var c4=x.insertCell(3);
+                var c5=x.insertCell(4);
+                var c6=x.insertCell(5);
+                var c7=x.insertCell(6);
+
+                c1.innerHTML=compobj[i].Id;
+                c2.innerHTML=compobj[i].Name;
+                c3.innerHTML=compobj[i].Ind;
+                c4.innerHTML=compobj[i].Uid;
+                c5.innerHTML=compobj[i].POCname;
+                c6.innerHTML=compobj[i].POCnum;
+                c7.innerHTML=compobj[i].Regdate;
+                //str = '<button class="btn btn-info" onclick="myFunction({0})">Remove</button>';
+                //str = str.replace("{0}",trainobj[i].TraineeId)
+                //c6.innerHTML=str;
+            }
         },
         error: function(error) {
             console.log(error);
