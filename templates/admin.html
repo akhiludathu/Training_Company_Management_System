@@ -39,7 +39,7 @@
                     <li ><a href="#home">HOME</a></li>
                     <li><a href="#features-sec">PROGRAMS</a></li>
                     <li><a href="#faculty-sec">ADD PROGRAM</a></li>
-                    <li><a href="#course-sec">GUIDELINES</a></li>
+                    <li><a href="#course-sec">COMPANIES</a></li>
                     <li><a href="http://localhost:5000/logout">LOGOUT</a></li>
                 </ul>
             </div>
@@ -56,7 +56,6 @@
                 <div class="flexslider set-flexi" id="main-section" >
                     <ul class="slides move-me">
                       <li>
-                        <h3>Delivering Quality Training</h3>
                           <h1>WELCOME {{user}}</h1>
                       </li>
                     </ul>
@@ -85,10 +84,7 @@
            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
                <h1 id="random" data-scroll-reveal="enter from the bottom after 0.2s"  class="header-line">PROGRAMS CURRENTLY OFFERED </h1>
                <p data-scroll-reveal="enter from the bottom after 0.3s" >
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo.
-                   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo.
+                 List of programs currently offered to all client companies.
               </p>
            </div>
        </div>
@@ -120,22 +116,22 @@
            <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
               <form id="newcourseform">
                   <div class="form-group">
-                      <input name="id" type="text" class="form-control "  required="required" placeholder="Program ID" />
+                      <input name="id" type="text" class="form-control "  maxlength="20" required="required" placeholder="Program ID" />
                   </div>
                   <div class="form-group">
-                      <input name="name" type="text" class="form-control " required="required"  placeholder="Program name" />
+                      <input name="name" type="text" class="form-control " maxlength="30" required="required"  placeholder="Program name" />
                   </div>
                   <div class="form-group">
-                      <input name="description" type="textarea" required="required" class="form-control" style="min-height: 100px;" placeholder="Description"/>
+                      <input name="description" type="textarea" required="required" maxlength="100" class="form-control" style="min-height: 100px;" placeholder="Description"/>
                   </div>
                   <div class="form-group">
-                      <input name="duration" type="text" class="form-control " required="required"  placeholder="Program Duration" />
+                      <input name="duration" type="text" class="form-control " required="required" maxlength="20" placeholder="Program Duration" />
                   </div>
                   <div class="form-group">
                       <input id="startdate" name="start" type="text" class="form-control " required="required"  placeholder="Start Date" />
                   </div>
                   <div class="form-group">
-                      <input name="supervisor" type="text" class="form-control " required="required"  placeholder="Supervisor Employee ID" />
+                      <input name="supervisor" type="text" class="form-control " required="required" maxlength="20" placeholder="Supervisor Employee ID" />
                   </div>
                   <div class="form-group">
                       <button id="addcoursebtn" type="button" class="btn btn-info btn-block btn-lg">SUBMIT</button>
@@ -152,12 +148,9 @@
   <div id="course-sec" class="container set-pad">
     <div class="row text-center">
       <div class="col-lg-8 col-lg-offset-2 col-md-8 col-sm-8 col-md-offset-2 col-sm-offset-2">
-        <h1 data-scroll-reveal="enter from the bottom after 0.1s" class="header-line">GUIDELINES</h1>
+        <h1 data-scroll-reveal="enter from the bottom after 0.1s" class="header-line">Companies registered</h1>
            <p data-scroll-reveal="enter from the bottom after 0.3s">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-              Aenean commodo.
-               Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-              Aenean commodo.
+             List of companies that have been registered through the online portal.
             </p>
       </div>
     </div>
@@ -223,7 +216,7 @@
 <!-- CONTACT SECTION END-->
 
   <div id="footer">
-        &copy 2014 yourdomain.com | All Rights Reserved |  <a href="http://binarytheme.com" style="color: #fff" target="_blank">Design by : binarytheme.com</a>
+        &All Rights Reserved |  <a href="http://binarytheme.com" style="color: #fff" target="_blank"></a>
   </div>
 
   <div class="modal fade" id="program-details-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">

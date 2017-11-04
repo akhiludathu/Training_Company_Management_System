@@ -61,13 +61,13 @@ def handle_login():
 
 @app.route('/handle_newcourse',methods=['POST'])
 def handle_newcourse():
-    try:
-        query = ("Insert into Program values (\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')" % (request.form['id'],request.form['name'],request.form['description'],request.form['duration'],request.form['start'],request.form['supervisor']))
-        cursor.execute(query)
-        cnx.commit()
-        return 'Success'
-    except:
-        return 'Failure'
+    #try:
+    query = ("Insert into Program values (\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%s\')" % (request.form['id'],request.form['name'],request.form['description'],request.form['duration'],request.form['start'],request.form['supervisor']))
+    cursor.execute(query)
+    cnx.commit()
+    return 'Success'
+    #except:
+        #return 'Failure'
 
 @app.route('/handle_newtrainee',methods=['POST'])
 def handle_newtrainee():
@@ -147,15 +147,15 @@ def getIds():
         cursor.execute("SELECT * FROM Program");
         ids = cursor.fetchall()
 
-        wishes_dict = []
-        for wish in ids:
-            wish_dict = {
-                    'Id': wish[0],
-                    'Name': wish[1],
-                    'Description': wish[2],
-                    'Duration':wish[3],
-                    'Start_Date':wish[4]}
-            wishes_dict.append(wish_dict)
+        progs_dict = []
+        for prog in ids:
+            prog_dict = {
+                    'Id': prog[0],
+                    'Name': prog[1],
+                    'Description': prog[2],
+                    'Duration':prog[3],
+                    'Start_Date':prog[4]}
+            progs_dict.append(prog_dict)
 
         cursor.execute("SELECT * FROM Company");
         ids = cursor.fetchall()
@@ -173,7 +173,7 @@ def getIds():
             companies_dict.append(company_dict)
 
         data = {}
-        data['progs'] = wishes_dict
+        data['progs'] = progs_dict
         data['comps'] = companies_dict
 
         return json.dumps(data)
@@ -189,15 +189,15 @@ def getPrograms():
         cursor.execute("SELECT * FROM Program");
         ids = cursor.fetchall()
 
-        wishes_dict = []
-        for wish in ids:
-            wish_dict = {
-                    'Id': wish[0],
-                    'Name': wish[1],
-                    'Description': wish[2],
-                    'Duration':wish[3],
-                    'Start_Date':wish[4]}
-            wishes_dict.append(wish_dict)
+        progs_dict = []
+        for prog in ids:
+            prog_dict = {
+                    'Id': prog[0],
+                    'Name': prog[1],
+                    'Description': prog[2],
+                    'Duration':prog[3],
+                    'Start_Date':prog[4]}
+            progs_dict.append(prog_dict)
         #return 'hi'
 
         user = session.get('user')
@@ -214,7 +214,7 @@ def getPrograms():
         trainees_dict = []
         for trainee in trs:
             train_dict = {
-                    'ProgramId':trainee[2],
+                    'ProgramId':trainee[0],
                     'Name':trainee[3],
                     'TraineeId':trainee[8],
                     'Phone':trainee[4],
@@ -222,7 +222,7 @@ def getPrograms():
             trainees_dict.append(train_dict)
 
         data = {}
-        data['progs'] = wishes_dict
+        data['progs'] = progs_dict
         data['trains'] = trainees_dict
         return json.dumps(data)
     else:
